@@ -1,0 +1,45 @@
+micronaut:
+  application:
+    name: iot-telemetry
+  server:
+    port: 8080
+
+datasources:
+  default:
+    url: jdbc:postgresql://sh.56wb.com:5432/ems_link
+    username: postgres
+    password: fuckthis321
+    driverClassName: org.postgresql.Driver
+    dialect: POSTGRES
+    maximum-pool-size: 10
+
+flyway:
+  datasources:
+    default:
+      enabled: false
+
+# Set enabled to true only after the cloud platform has supplied the P0 values
+# from the interface specification. Keep credentials outside source control,
+# for example through CLOUD_MQTT_USERNAME and CLOUD_MQTT_PASSWORD.
+cloud-mqtt:
+  enabled: true
+  host: '43.143.122.120'
+  port: 1883
+  tls: false
+  client-id: 'ess_01'
+  # Subscribe to every authorized station project. Narrow this to
+  # ems/v1/<projectId>/telemetry/up if one deployment handles one project.
+  telemetry-topic-filter: ems/v1/+/telemetry/up
+  # Dedicated connection for history query request/response. Must differ from client-id.
+  history-client-id: ess_01_history
+  history-topic-filter: ems/v1/+/history
+  max-history-values: 100000
+  history-page-size: 1000
+  history-query-timeout-seconds: 30
+  username: mqtt_ems
+  password: 92gt5mff6tahaems
+
+endpoints:
+  health:
+    enabled: true
+    sensitive: false

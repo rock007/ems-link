@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.zheng</groupId>
+  <artifactId>ems-link</artifactId>
+  <version>0.1</version>
+  <packaging>${packaging}</packaging>
+
+  <parent>
+    <groupId>io.micronaut.platform</groupId>
+    <artifactId>micronaut-parent</artifactId>
+    <version>5.2.2</version>
+  </parent>
+
+  <properties>
+    <packaging>jar</packaging>
+    <jdk.version>25</jdk.version>
+    <release.version>25</release.version>
+    <micronaut.version>5.2.2</micronaut.version>
+    <micronaut.aot.enabled>false</micronaut.aot.enabled>
+    <micronaut.aot.packageName>com.zheng.ems_link.aot.generated</micronaut.aot.packageName>
+    <micronaut.runtime>netty</micronaut.runtime>
+    <exec.mainClass>com.zheng.ems_link.Application</exec.mainClass>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>central</id>
+      <url>https://repo.maven.apache.org/maven2</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    
+     <dependency>
+        <groupId>io.micronaut</groupId>
+        <artifactId>micronaut-http-server-netty</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>io.micronaut.serde</groupId>
+        <artifactId>micronaut-serde-jackson</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>io.micronaut.data</groupId>
+        <artifactId>micronaut-data-jdbc</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>io.micronaut.sql</groupId>
+        <artifactId>micronaut-jdbc-hikari</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+      <dependency>
+          <groupId>io.micronaut</groupId>
+          <artifactId>micronaut-http-client</artifactId>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+          <scope>runtime</scope>
+      </dependency>
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+        <groupId>io.micronaut.flyway</groupId>
+        <artifactId>micronaut-flyway</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>io.micronaut.mqtt</groupId>
+        <artifactId>micronaut-mqtt-hivemq</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>io.micronaut</groupId>
+        <artifactId>micronaut-management</artifactId>
+    </dependency>
+
+    <!-- Required to load application.yml at runtime. -->
+    <dependency>
+        <groupId>org.yaml</groupId>
+        <artifactId>snakeyaml</artifactId>
+        <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>io.micronaut.maven</groupId>
+        <artifactId>micronaut-maven-plugin</artifactId>
+        <configuration>
+          <configFile>aot-${packaging}.properties</configFile>
+<configurationValidation>
+    <enabled>false</enabled>
+
+    <suppressions>
+        <suppression>datasources.default.db-type</suppression>
+    </suppressions>
+    <failOnNotPresent>true</failOnNotPresent>
+    <validateDependencyInjection>false</validateDependencyInjection>
+    <cacheEnabled>true</cacheEnabled>
+
+</configurationValidation>
+
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <!-- Uncomment to enable incremental compilation -->
+          <!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
+
+          <annotationProcessorPaths combine.children="append">
+            <path>
+              <groupId>io.micronaut</groupId>
+              <artifactId>micronaut-http-validation</artifactId>
+              <version>${micronaut.core.version}</version>
+            </path>
+              <path>
+                  <groupId>io.micronaut.data</groupId>
+                  <artifactId>micronaut-data-processor</artifactId>
+                  <version>${micronaut.data.version}</version>
+              </path>
+            <path>
+              <groupId>io.micronaut.serde</groupId>
+              <artifactId>micronaut-serde-processor</artifactId>
+              <version>${micronaut.serialization.version}</version>
+              <exclusions>
+                <exclusion>
+                  <groupId>io.micronaut</groupId>
+                  <artifactId>micronaut-inject</artifactId>
+                </exclusion>
+              </exclusions>
+            </path>
+          </annotationProcessorPaths>
+          <compilerArgs>
+            <arg>-Amicronaut.processing.group=com.zheng</arg>
+            <arg>-Amicronaut.processing.module=ems_link</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+
+</project>
